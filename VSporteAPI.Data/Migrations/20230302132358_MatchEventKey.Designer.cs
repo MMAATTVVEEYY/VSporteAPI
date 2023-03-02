@@ -12,8 +12,8 @@ using VSporteAPI.Data;
 namespace VSporteAPI.Data.Migrations
 {
     [DbContext(typeof(VSporteAPIDbContext))]
-    [Migration("20230301210129_datetime")]
-    partial class datetime
+    [Migration("20230302132358_MatchEventKey")]
+    partial class MatchEventKey
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,6 +54,9 @@ namespace VSporteAPI.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("ClubId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("EventType")
                         .IsRequired()
                         .HasColumnType("text");
@@ -61,7 +64,7 @@ namespace VSporteAPI.Data.Migrations
                     b.Property<DateTime>("MatchTime")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("PlayerId")
+                    b.Property<int?>("PlayerId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -120,9 +123,7 @@ namespace VSporteAPI.Data.Migrations
                 {
                     b.HasOne("VSporteAPI.Entities.Player", null)
                         .WithMany("MatchEvents")
-                        .HasForeignKey("PlayerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PlayerId");
                 });
 
             modelBuilder.Entity("VSporteAPI.Entities.PlayerClub", b =>

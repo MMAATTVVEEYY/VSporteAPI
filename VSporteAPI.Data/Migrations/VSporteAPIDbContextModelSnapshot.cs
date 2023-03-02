@@ -51,6 +51,9 @@ namespace VSporteAPI.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("ClubId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("EventType")
                         .IsRequired()
                         .HasColumnType("text");
@@ -58,7 +61,7 @@ namespace VSporteAPI.Data.Migrations
                     b.Property<DateTime>("MatchTime")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("PlayerId")
+                    b.Property<int?>("PlayerId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -117,9 +120,7 @@ namespace VSporteAPI.Data.Migrations
                 {
                     b.HasOne("VSporteAPI.Entities.Player", null)
                         .WithMany("MatchEvents")
-                        .HasForeignKey("PlayerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PlayerId");
                 });
 
             modelBuilder.Entity("VSporteAPI.Entities.PlayerClub", b =>

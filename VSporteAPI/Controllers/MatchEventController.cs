@@ -19,8 +19,12 @@ namespace VSporteAPI.Controllers
         [HttpGet("id")]
         public async Task<IActionResult> GetMatchEventById(int id)
         {
-            return Ok(await matchEventService.GetMatchEventById(id));
-
+            var matchEvent= await matchEventService.GetMatchEventById(id);
+            if (matchEvent == null)
+            {
+                return NotFound();
+            }
+            return Ok(matchEvent);
         }
 
         [HttpGet]
@@ -38,7 +42,7 @@ namespace VSporteAPI.Controllers
             {
                 return Ok(result);
             }
-            return BadRequest("MatchEvent already exists");
+            return BadRequest();
 
         }
 
@@ -63,7 +67,7 @@ namespace VSporteAPI.Controllers
             {
                 return Ok(result);
             }
-            return NotFound($"No such matchEvent with id = {matchEvent.Id}");
+            return BadRequest();
         }
     }
 }

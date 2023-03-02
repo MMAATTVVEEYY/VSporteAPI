@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
 using VSporte.Core.Abstract;
@@ -12,18 +13,45 @@ namespace VSporte.Core
     public class MatchEventService:IMatchEventService
     {
         private readonly IMatchEventRepository matchEventRepository;
-        public MatchEventService(IMatchEventRepository matchEventRepository)
+        private readonly IPlayerRepository playerRepository;
+        private readonly IClubRepository clubRepository;
+        public MatchEventService(IMatchEventRepository matchEventRepository, IPlayerRepository playerRepository, IClubRepository clubRepository)
         {
             this.matchEventRepository = matchEventRepository;
+            this.playerRepository = playerRepository;
+            this.clubRepository = clubRepository;
         }
+       
+
         public async Task<MatchEvent> AddMatchEvent(MatchEvent matchEvent)
         {
             
             if (matchEvent != null)
-            {
-                await matchEventRepository.AddMatchEvent(matchEvent);
-                return matchEvent;
-
+            {   //PlayerId Должен либо принадлежать существующему Player, либо Null. Нельзя присваивать несущетсвующих
+                if (matchEvent.PlayerId != null)
+                {
+                var Presult = await playerRepository.GetPlayerById((int)matchEvent.PlayerId);
+                if (Presult != null)
+                    { // здесь player не равен 0 и существует в бд
+                        var Cresult1= await clubRepository.GetClubById(matchEvent.ClubId);
+                        if (Cresult1 != null)
+                        {
+                            await matchEventRepository.AddMatchEvent(matchEvent);
+                            return matchEvent;
+                        }
+                        return null;
+                    }
+                    // здесь player не существует
+                    return null;
+                }
+                // тут playerId = null
+                var Cresult2 = await clubRepository.GetClubById(matchEvent.ClubId);
+                if (Cresult2 != null)
+                {
+                    await matchEventRepository.AddMatchEvent(matchEvent);
+                    return matchEvent;
+                }
+                return null;
             }
             return null;
 
@@ -49,8 +77,34 @@ namespace VSporte.Core
 
         public async Task<MatchEvent> UpdateMatchEvent(MatchEvent matchEvent)
         {
-            var result = await matchEventRepository.UpdateMatchEvent(matchEvent);
-            return result;
+            if (matchEvent != null)
+            {   //PlayerId Должен либо принадлежать существующему Player, либо Null. Нельзя присваивать несущетсвующих
+                if (matchEvent.PlayerId != null)
+                {
+                    var Presult = await playerRepository.GetPlayerById((int)matchEvent.PlayerId);
+                    if (Presult != null)
+                    { // здесь player не равен 0 и существует в бд
+                        var Cresult1 = await clubRepository.GetClubById(matchEvent.ClubId);
+                        if (Cresult1 != null)
+                        {
+                            await matchEventRepository.UpdateMatchEvent(matchEvent);
+                            return matchEvent;
+                        }
+                        return null;
+                    }
+                    // здесь player не существует
+                    return null;
+                }
+                // тут playerId = null
+                var Cresult2 = await clubRepository.GetClubById(matchEvent.ClubId);
+                if (Cresult2 != null)
+                {
+                    await matchEventRepository.UpdateMatchEvent(matchEvent);
+                    return matchEvent;
+                }
+                return null;
+            }
+            return null;
         }
     }
 }

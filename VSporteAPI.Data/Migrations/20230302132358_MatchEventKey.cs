@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace VSporteAPI.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class datetime : Migration
+    public partial class MatchEventKey : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,7 +48,8 @@ namespace VSporteAPI.Data.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    PlayerId = table.Column<int>(type: "integer", nullable: false),
+                    PlayerId = table.Column<int>(type: "integer", nullable: true),
+                    ClubId = table.Column<int>(type: "integer", nullable: false),
                     EventType = table.Column<string>(type: "text", nullable: false),
                     MatchTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
@@ -59,8 +60,7 @@ namespace VSporteAPI.Data.Migrations
                         name: "FK_MatchEvents_Players_PlayerId",
                         column: x => x.PlayerId,
                         principalTable: "Players",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(

@@ -10,10 +10,10 @@ namespace VSporteAPI.Entities
     public class MatchEvent
     {
         public int Id { get; set; }
-        public int PlayerId { get; set; }
-        //virtual public Player? Player { get; set; }
+        public int? PlayerId { get; set; }
+       // virtual public Player? Player { get; set; }
         //public int? PlayerId { get; set; }
-        //public int ClubId { get; set; }
+        public int ClubId { get; set; }
         public string EventType { get; set; }
         public DateTime MatchTime { get; set; }
 
@@ -23,6 +23,8 @@ namespace VSporteAPI.Entities
             {
                 return;
             }
+            PlayerId = matchEvent.PlayerId;
+            ClubId = matchEvent.ClubId;
             EventType = matchEvent.EventType;
             MatchTime = matchEvent.MatchTime;
         }

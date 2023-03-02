@@ -19,7 +19,12 @@ namespace VSporteAPI.Controllers
         [HttpGet("id")]
         public async Task<IActionResult> GetClubById(int id)
         {
-            return Ok(await clubService.GetClubById(id));
+            var club = await clubService.GetClubById(id);
+            if (club == null)
+            {
+                return NotFound();
+            }
+            return Ok(club);
 
         }
 

@@ -20,7 +20,12 @@ namespace VSporteAPI.Controllers
         [HttpGet("id")]
         public async Task <IActionResult> GetPlayerById(int id)
         {
-            return Ok (await playerService.GetPlayerById(id));
+            var player = await playerService.GetPlayerById(id);
+            if (player == null)
+            {
+                return NotFound();
+            }
+            return Ok (player);
            
         }
 

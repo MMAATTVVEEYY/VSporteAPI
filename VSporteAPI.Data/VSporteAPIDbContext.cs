@@ -24,16 +24,18 @@ namespace VSporteAPI.Data
         {
             modelBuilder.Entity<PlayerClub>()
                 .HasKey(c => new { c.PlayerId, c.ClubId });
+            modelBuilder.Entity<MatchEvent>()
+                .HasKey(c => new {  c.Id });
 
-           /* modelBuilder.Entity<Club>()
-                        .HasMany(c => c.PlayerClubs).WithMany()
-                        .HasForeignKey(c => c.ClubId);
+            /* modelBuilder.Entity<Club>()
+                         .HasMany(c => c.PlayerClubs).WithMany()
+                         .HasForeignKey(c => c.ClubId);
 
-            modelBuilder.Entity<Media>()
-                .HasMany(c => c.ContractMedias)
-                .WithRequired()
-                .HasForeignKey(c => c.MediaId);*/
-            
+             modelBuilder.Entity<Media>()
+                 .HasMany(c => c.ContractMedias)
+                 .WithRequired()
+                 .HasForeignKey(c => c.MediaId);*/
+
         }
 
 
